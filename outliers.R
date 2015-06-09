@@ -171,6 +171,21 @@ remove.outliers <- function(df, cols, method= list(...),
   }
 }
 
+## needed functions for vectorized version
+box.stat   <- function(vec, coef2) {
+  bnd <- boxplot.stats(vec, coef= coef2)$stats[c(1,5)]
+  min <- min(vec) < bnd[1]
+  max <- max(vec) > bnd[2]
+  return(c(bnd, min, max))
+}
+
+quant.stat <- function(vec, probs2= c(.025, .975)) {
+  bnd <- quantile(vec, probs= probs2)
+  min <- min(vec) < bnd[1]
+  max <- max(vec) > bnd[2]
+  return(c(bnd, min, max))  
+}
+
 #' @title Identify Data Outliers - vectorized
 #' @description  
 #' Determine if the specified columns of a data-frame have outliers. User can use
@@ -181,62 +196,31 @@ remove.outliers <- function(df, cols, method= list(...),
 #' @param cols A vector of indices.
 #' @param method List of length two. either c("boxplot", coef= X) or 
 #' c("quantile", q= c(min, max))
-#' find.outliers2 <- function(df, cols, method= list(...)) {
-# arguments:
-# df        = dataframe of interest
-# cols      = c(<numeric indices>) of df columns you wish to examine for 
-#               outliers
-# method    = list of length 2; either:
-# list=("boxplot", coef= X) - uses boxplot.stats(, coef= X)
-# or c("quantile", q= c(a, b)) - uses quantile(, probs= c(a, b))
-
-
-
-if (min(cols) < 1) {
-  stop("you have entered invalid columns. Please correct your inputs.")
-} else if (max(cols) > length(df)) {
-  stop("you have entered invalid columns. Please correct your inputs.")
-}
-if (method[[1]] != "boxplot" & method[[1]] != "quantile") {
-  stop(cat("You have entered an invalid method for identifying outliers. 
-           Please correct your call.", fill=T))
-}
-if (method[[1]] == "boxplot" & method[[2]][1] < 0) {
-  stop(cat("You have entered an invalid coefficient, Please correct your call.", fill=T))
-} else if (method[[1]] == "quantile" & length(method$q) != 2) {
-  stop(cat("You have entered invalid quantiles, Please correct your call.", fill=T))
-}
-
-iqr <- matrix(nrow = length(cols), ncol= 4, 
-              dimnames= list(names(df[cols]), 
-                             c("min bound", "max bound", "min outliers?", "max outliers?")))
-
-## determine outliers based on method= selection
-if (method[[1]] == "boxplot") {
-  ## define needed functions
-  box.stat1   <- function(vec, coef2= method[[2]]) {boxplot.stats(vec, coef= coef2)$stats[1]}
-  box.stat5   <- function(vec, coef2= method[[2]]) {boxplot.stats(vec, coef= coef2)$stats[5]}
-  min.compare <- function(vec) {ifelse(min(vec) < box.stat1(vec), 1, 0)}
-  max.compare <- function(vec) {ifelse(max(vec) > box.stat5(vec), 1, 0)}
-  
-  # apply functions 
-  iqr[, 1] <- apply(df[, cols], 2, box.stat1)
-  iqr[, 2] <- apply(df[, cols], 2, box.stat5)
-  iqr[, 3] <- apply(df[, cols], 2, min.compare)
-  iqr[, 4] <- apply(df[, cols], 2, max.compare)
-  
-} else if (method[[1]] == "quantile") {
-  ## define needed functions
-  quant.low   <- function(vec, probs2= method$q[1]) {quantile(vec, probs= probs2)}
-  quant.high  <- function(vec, probs2= method$q[2]) {quantile(vec, probs= probs2)}
-  min.compare <- function(vec) {ifelse(min(vec) < quant.low(vec), 1, 0)}
-  max.compare <- function(vec) {ifelse(max(vec) > quant.high(vec), 1, 0)}
-  
-  # apply functions 
-  iqr[, 1] <- apply(df[, cols], 2, quant.low)
-  iqr[, 2] <- apply(df[, cols], 2, quant.high)
-  iqr[, 3] <- apply(df[, cols], 2, min.compare)
-  iqr[, 4] <- apply(df[, cols], 2, max.compare)     
-} 
-return(iqr)
+find.outliers2 <- function(df, cols, method= list(...)) {
+  if (min(cols) < 1) {
+    stop("you have entered invalid columns. Please correct your inputs.")
+  } else if (max(cols) > length(df)) {
+    stop("you have entered invalid columns. Please correct your inputs.")
+  }
+  if (method[[1]] != "boxplot" & method[[1]] != "quantile") {
+    stop(cat("You have entered an invalid method for identifying outliers. 
+             Please correct your call.", fill=T))
+  }
+  if (method[[1]] == "boxplot" & method[[2]][1] < 0) {
+    stop(cat("You have entered an invalid coefficient, Please correct your call.", fill=T))
+  } else if (method[[1]] == "quantile" & length(method[[2]]) != 2) {
+    stop(cat("You have entered invalid quantiles, Please correct your call.", fill=T))
+  }
+    
+  ## determine outliers based on method= selection
+  if (method[[1]] == "boxplot") {  
+    # apply functions 
+    iqr <- t(apply(df[, cols], 2, box.stat, coef2= method[[2]]))
+  } else if (method[[1]] == "quantile") {  
+    # apply functions 
+    iqr <- t(apply(df[, cols], 2, quant.stat), probs2= method[[2]])
+  }
+  # name and return
+  dimnames(iqr) <- list(names(df)[cols], c("min bound", "max bound", "min outliers?", "max outliers?"))
+  return(iqr)
 }
