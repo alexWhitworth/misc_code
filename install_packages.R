@@ -3,10 +3,10 @@ install.packages(c(
     "RcppEigen", "ggplot2", "lubridate", "ggvis", "magrittr", "stringr", "shiny", "reshape2",
     "quantmod", "zoo", "xts", "nnet", "forecast", "astsa", "bspec", "spectral", "prophet", 
     "roxygen2", "foreign", "leaflet", "xtable", "testthat", 
-    "scales", "profr", "mclust", "viridis", "httr", "rstan", "rstanarm",
+    "scales", "profr", "mclust", "viridis", "httr", "rstan", "rstanarm", "brms",
     "microbenchmark", "clustvarsel", "Rmixmod", "RColorBrewer", "RCurl",
     "gtools", "rsconnect", "Hmisc", "optimx", "lbfgs", "quadprog", "kernlab",
-    "acs", "XML", "scrapeR", "xgboost", "imputeMulti", "synthACS"
+    "acs", "XML", "scrapeR", "xgboost", "imputeMulti", "synthACS", "fredr"
 ), dependencies = c("Depends", "Imports"))
 
 library(RCurl)
