@@ -1,10 +1,11 @@
 install.packages(c(
-    "lme4", "devtools", "merTools",  "randomForest", "Rcpp", "dplyr", "data.table", 
-    "ggplot2", "lubridate", "ggvis", "quantmod", "zoo", "xts", "nnet", "HLMdiag", 
-    "roxygen2", "foreign", "leaflet", "magrittr", "stringr", "shiny", "xtable", "testthat", 
-    "scales", "profr", "mclust", "reshape2", "viridis", "httr", "rstan", "rstanarm",
+    "lme4", "HLMdiag", "devtools", "merTools",  "dplyr", "data.table", "Rcpp", "RcppArmadillo", 
+    "RcppEigen", "ggplot2", "lubridate", "ggvis", "magrittr", "stringr", "shiny", "reshape2",
+    "quantmod", "zoo", "xts", "nnet", "forecast", "astsa", "bspec", "spectral", "prophet", 
+    "roxygen2", "foreign", "leaflet", "xtable", "testthat", 
+    "scales", "profr", "mclust", "viridis", "httr", "rstan", "rstanarm",
     "microbenchmark", "clustvarsel", "Rmixmod", "RColorBrewer", "RCurl",
-    "gtools", "forecast", "RcppArmadillo", "RcppEigen", "rsconnect",
+    "gtools", "rsconnect", "Hmisc", "optimx", "lbfgs", "quadprog", "kernlab",
     "acs", "XML", "scrapeR", "xgboost", "imputeMulti", "synthACS"
 ), dependencies = c("Depends", "Imports"))
 
