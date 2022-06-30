@@ -1,33 +1,25 @@
 
 #----------------------------------------------------------
-# Mac OSX 11.6.5
+# Mac OSX 11.4
 #----------------------------------------------------------
-XCBASE=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-GCCBASE=/usr/local/opt/gcc
-GETTEXT=/usr/local/bin/gettext
-GCCVERSION=11
-LOC_FORTRAN=/usr/local/opt/gfortran
-LOC_LLVM=/usr/local/opt/llvm
+XCBASE=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 
-LDFLAGS=-L/usr/local/opt/llvm/lib
-#CPPFLAGS=-I$(GETTEXT) -I$(LOC_LLVM)/include
-#LDFLAGS=-L$(GETTEXT) -I$(LOC_LLVM)/include
+LOC_HOMEBREW=/opt/homebrew
+GCC=$(LOC_HOMEBREW)/opt/gcc
+GCCVER=11
 
-CPPFLAGS=-I$(LOC_LLVM)/include
-LDFLAGS=-I$(LOC_LLVM)/include
-CPPFLAGS += -fopenmp
-# LDFLAGS += -lomp
+GETTEXT=$(LOC_HOMEBREW)/bin/gettext
+LOC_CLANG=/usr/bin/clang
+LOC_CLANGpp=/usr/bin/clang++
+LOC_FORTRAN=$(LOC_HOMEBREW)/bin/gfortran
+LOC_LLVM=$(LOC_HOMEBREW)/opt/llvm
 
-CC=$(GCCBASE)/bin/g++-${GCCVERSION}
-CXX=$(GCCBASE)/bin/g++-${GCCVERSION}
-CXX11=$(GCCBASE)/bin/g++-${GCCVERSION}
-CXX14=$(GCCBASE)/bin/g++-${GCCVERSION}
-CXX17=$(GCCBASE)/bin/g++-${GCCVERSION}
-CXX1X=$(GCCBASE)/bin/g++-${GCCVERSION}
+CC=gcc-$(GCCVER) -fopenmp
+CXX=g++-$(GCCVER) -fopenmp
 
 CFLAGS=-g -O3 -Wall -pedantic -std=gnu99 -mtune=native -pipe
 CXXFLAGS=-g -O3 -Wall -pedantic -std=c++11 -mtune=native -pipe
 
-FC=$(LOC_FORTRAN)/bin/gfortran-${GCCVERSION}
-F77=$(LOC_FORTRAN)/bin/gfortran-${GCCVERSION}
-FLIBS=-L$(LOC_FORTRAN)/bin/gfortran-${GCCVERSION} -lm -lgfortran -lquadmath
+# LDFLAGS=-L/opt/homebrew/Cellar/gettext/0.21/lib -L$(LOC_LLVM)/lib -Wl,-rpath,$(LOC_LLVM)/lib
+# CPPFLAGS=-I/opt/homebrew/Cellar/gettext/0.21/include -I$(LOC_LLVM)/include -I$(XCBASE)
+
