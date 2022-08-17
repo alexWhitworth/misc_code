@@ -1,14 +1,14 @@
 
 #----------------------------------------------------------
-# Mac OSX 11.4
+# Mac OSX 12.5
 #----------------------------------------------------------
 XCBASE=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 
 LOC_HOMEBREW=/opt/homebrew
 GCC=$(LOC_HOMEBREW)/opt/gcc
-GCCVER=11
+GCCVER=12
 
-GETTEXT=$(LOC_HOMEBREW)/bin/gettext
+GETTEXT=$(LOC_HOMEBREW)/opt/gettext
 LOC_CLANG=/usr/bin/clang
 LOC_CLANGpp=/usr/bin/clang++
 LOC_FORTRAN=$(LOC_HOMEBREW)/bin/gfortran
@@ -17,9 +17,15 @@ LOC_LLVM=$(LOC_HOMEBREW)/opt/llvm
 CC=gcc-$(GCCVER) -fopenmp
 CXX=g++-$(GCCVER) -fopenmp
 
+
 CFLAGS=-g -O3 -Wall -pedantic -std=gnu99 -mtune=native -pipe
 CXXFLAGS=-g -O3 -Wall -pedantic -std=c++11 -mtune=native -pipe
 
-# LDFLAGS=-L/opt/homebrew/Cellar/gettext/0.21/lib -L$(LOC_LLVM)/lib -Wl,-rpath,$(LOC_LLVM)/lib
-# CPPFLAGS=-I/opt/homebrew/Cellar/gettext/0.21/include -I$(LOC_LLVM)/include -I$(XCBASE)
+LDFLAGS=-L/opt/homebrew/Cellar/gettext/0.21/lib -L$(LOC_LLVM)/lib -Wl,-rpath,$(LOC_LLVM)/lib
+CPPFLAGS=-I/opt/homebrew/Cellar/gettext/0.21/include -I$(LOC_LLVM)/include -I$(XCBASE)
 
+# openssl + udunits --- not working
+LDFLAGS=-L/opt/homebrew/opt/openssl@1.1/lib
+CPPFLAGS=-I/opt/homebrew/opt/openssl@1.1/include
+LDFLAGS=-L/opt/local/bin/udunits2/lib
+CPPFLAGS=-I/opt/local/bin/udunits2/include
