@@ -25,7 +25,7 @@ LDFLAGS=-L/opt/homebrew/Cellar/gettext/0.21/lib -L$(LOC_LLVM)/lib -Wl,-rpath,$(L
 CPPFLAGS=-I/opt/homebrew/Cellar/gettext/0.21/include -I$(LOC_LLVM)/include -I$(XCBASE)
 
 # openssl + udunits --- not working
-LDFLAGS=-L/opt/homebrew/opt/openssl@1.1/lib
-CPPFLAGS=-I/opt/homebrew/opt/openssl@1.1/include
+LDFLAGS=-L/opt/local/bin/openssl@1.1/lib
+CPPFLAGS=-I/opt/local/bin/openssl@1.1/include
 LDFLAGS=-L/opt/local/bin/udunits2/lib
 CPPFLAGS=-I/opt/local/bin/udunits2/include
