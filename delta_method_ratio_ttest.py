@@ -3,6 +3,7 @@ import numpy as np
 from scipy.stats import norm 
 
 # example data
+np.random.seed(123)
 click_control = np.random.randint(0,20,10000)
 view_control = np.random.randint(1,60,10000)
 
@@ -28,8 +29,8 @@ def var_ratio(x, y):
     var_y = np.var(y,ddof=1)
     cov_xy = np.cov(x,y,ddof=1)[0][1] # ddof=1 --> sample vs population covariance
     return (mean_x*mean_x)/(mean_y*mean_y*len(x)) * (var_x/mean_x**2 + var_y/mean_y**2 - 2*cov_xy/(mean_x*mean_y))
-    
- 
+
+
 def ttest(mean_c, mean_t, var_c, var_t, alpha=0.05):
     """
     Perform a two-sample t-test using means and variances.
@@ -54,13 +55,14 @@ def ttest(mean_c, mean_t, var_c, var_t, alpha=0.05):
     upper = delta + norm.ppf(1 - alpha / 2) * se
     z = delta / se
     p_val = norm.sf(abs(z))*2
-
+    # return
     return {'delta': delta
-             , 'ci': (lower, upper)
-             , 'p_value': p_val
-             , 'z_stat': z
+            , 'pct_delta': delta / mean_c if mean_c != 0.0 else np.nan
+            , 'ci': (lower, upper)
+            , 'p_value': p_val
+            , 'z_stat': z
     }
-    
+
 
 var_control = var_ratio(control['click'],control['view'])
 var_treatment = var_ratio(treatment['click'],treatment['view'])
