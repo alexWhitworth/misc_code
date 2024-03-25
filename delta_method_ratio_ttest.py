@@ -31,7 +31,7 @@ def var_ratio(x, y):
     return (mean_x*mean_x)/(mean_y*mean_y*len(x)) * (var_x/mean_x**2 + var_y/mean_y**2 - 2*cov_xy/(mean_x*mean_y))
 
 
-def ttest(mean_c, mean_t, var_c, var_t, alpha=0.05):
+def ttest(mean_c, mean_t, var_c, var_t, n_c, n_t, alpha=0.05):
     """
     Perform a two-sample t-test using means and variances.
 
@@ -40,6 +40,8 @@ def ttest(mean_c, mean_t, var_c, var_t, alpha=0.05):
     mean_t (float): Mean of the treatment group.
     var_c (float): Variance of the control group.
     var_t (float): Variance of the treatment group.
+    n_c (int): number of control units
+    n_t (int): number of test units
     alpha (float, optional): Significance level for the confidence interval. Default is 0.05.
 
     Returns:
@@ -50,7 +52,7 @@ def ttest(mean_c, mean_t, var_c, var_t, alpha=0.05):
         - 'z_stat' (float): Z-statistic for the t-test.
     """
     delta = mean_t - mean_c
-    se = np.sqrt(var_c + var_t)
+    se = np.sqrt(var_c / n_c + var_t / n_t)
     lower = delta - norm.ppf(1 - alpha / 2) * se 
     upper = delta + norm.ppf(1 - alpha / 2) * se
     z = delta / se
